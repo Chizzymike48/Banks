@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zenith Bank Account Manager</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <h1>🏦 Zenith Bank Account Manager</h1>
+    <p class="tagline">Manage your savings and checkings with ease</p>
+
+    <div class="card">
+      <h2>Check Balance</h2>
+      <input type="number" id="checkId" placeholder="Enter Account ID" />
+      <button onclick="checkBalanceUI()">Check Balance</button>
+
+      <div id="accountDetails" class="details-card hidden">
+        <h3>Account Details</h3>
+        <p><strong>Name:</strong> <span id="accName"></span></p>
+        <p><strong>Type:</strong> <span id="accType"></span></p>
+        <p><strong>Balance:</strong> <span id="accBalance"></span></p>
+      </div>
+
+      <p id="balanceResult"></p>
+    </div>
+
+    <div class="card">
+      <h2>Deposit</h2>
+      <input type="number" id="depositId" placeholder="Enter Account ID" />
+      <input type="number" id="depositAmount" placeholder="Enter Amount" />
+      <button onclick="depositUI()">Deposit</button>
+      <p id="depositResult"></p>
+    </div>
+
+    <div class="card">
+      <h2>Withdraw</h2>
+      <input type="number" id="withdrawId" placeholder="Enter Account ID" />
+      <input type="number" id="withdrawAmount" placeholder="Enter Amount" />
+      <button onclick="withdrawUI()">Withdraw</button>
+      <p id="withdrawResult"></p>
+    </div>
+
+    <footer>
+      <p>© 2025 Zenith Bank | Powered by JavaScript 💻</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

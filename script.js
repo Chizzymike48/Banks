@@ -1,72 +1,105 @@
-
 const customersAccount = [
-  {accountId: 225, accountHolder: "Osondu Godswil", balance: 500000, type: "Savings"},
-  {accountId: 230, accountHolder: "Olatunde Valentine", balance: 2700000, type: "Checkings"},
-  {accountId: 235, accountHolder: "Ugwu Malachy", balance: 600000, type: "Checkings"},
-  {accountId: 240, accountHolder: "Paul Peculiar", balance: 180000, type: "Savings"}
+  { accountId: 225, accountHolder: "Osondu Godswil", balance: 500000, type: "Savings" },
+  { accountId: 230, accountHolder: "Olatunde Valentine", balance: 2700000, type: "Checkings" },
+  { accountId: 235, accountHolder: "Ugwu Malachy", balance: 600000, type: "Checkings" },
+  { accountId: 240, accountHolder: "Paul Peculiar", balance: 180000, type: "Savings" }
 ];
 
 const bankName = "Zenith Bank";
 
-function checkBalance(accountId) {
+// Find Account
+function findAccount(accountId) {
   const account = customersAccount.find(acc => acc.accountId === accountId);
-  if (account) {
-    console.log(`${account.accountHolder}'s current balance is $${account.balance}`);
-  } else {
-    console.log("Account not found");
-  }
+  return account || null;
 }
 
+// Deposit
 function deposit(accountId, amount) {
-  const account = customersAccount.find(acc => acc.accountId === accountId);
-  if (account && amount > 0) {
-    account.balance += amount;
-    console.log(`Deposit successful! Your account has been credited with $${amount}. $${amount} has been added to ${account.accountHolder}'s account at ${bankName}.`);
-  } else {
-    console.log("Invalid deposit");
-  }
+  const account = findAccount(accountId);
+  if (!account) return "❌ Account not found.";
+  if (amount <= 0) return "⚠️ Invalid deposit amount.";
+  account.balance += amount;
+  return `✅ $${amount} deposited successfully into ${account.accountHolder}'s ${account.type} account.`;
 }
 
+//  Withdraw
 function withdraw(accountId, amount) {
-  const account = customersAccount.find(acc => acc.accountId === accountId);
-  const feeRate = 0.03;
-  if (account && amount > 0) {
-    const fee = amount * feeRate;
-    const totalFee = amount + fee
-    if (account.balance >= totalFee) {
-       account.balance -= totalFee;
-      console.log(`Withdrawal of $${amount} successful! Fee: $${fee.toFixed(2)}.`);
-    } else {
-      console.log("Insufficient funds for this withdrawal.");
-    }
+  const account = findAccount(accountId);
+  if (!account) return "❌ Account not found.";
+  if (amount <= 0) return "⚠️ Invalid withdrawal amount.";
+  if (account.balance >= amount) {
+    account.balance -= amount;
+    return `✅ Withdrawal of $${amount} successful.`;
   } else {
-    console.log("Invalid withdrawal");
+    return "❌ Insufficient funds.";
   }
 }
-checkBalance(230);
-deposit(230, 500);
-withdraw(230, 200);
-checkBalance(230);
 
-checkBalance(255);
-deposit(255, 1000);
-withdraw(255,500);
-checkBalance(255);
-
-checkBalance(235);
-deposit(235, 2000);
-withdraw(235,300);
-checkBalance(235);
-
-checkBalance(240);
-deposit(240, 2000);
-withdraw(240,300);
-checkBalance(240);
-
-console.log(bankName)
-try{
-  console.log(feeRate);
-}catch(error){
-  console.log("error: it can not be assessed.");
+// Check Balance
+function checkBalance(accountId) {
+  const account = findAccount(accountId);
+  return account ? account.balance : null;
 }
 
+
+function showAccountDetails(account) {
+  const detailsCard = document.getElementById("accountDetails");
+  const accName = document.getElementById("accName");
+  const accType = document.getElementById("accType");
+  const accBalance = document.getElementById("accBalance");
+
+  if (account) {
+    detailsCard.classList.remove("hidden");
+    accName.textContent = account.accountHolder;
+    accType.textContent = account.type;
+    accBalance.textContent = `$${account.balance.toLocaleString()}`;
+  } else {
+    detailsCard.classList.add("hidden");
+  }
+}
+
+function checkBalanceUI() {
+  const id = parseInt(document.getElementById("checkId").value);
+  const account = findAccount(id);
+  const result = document.getElementById("balanceResult");
+
+  if (account) {
+    showAccountDetails(account);
+    result.textContent = "";
+  } else {
+    document.getElementById("accountDetails").classList.add("hidden");
+    result.textContent = "❌ Account not found.";
+  }
+}
+
+function depositUI() {
+  const id = parseInt(document.getElementById("depositId").value);
+  const amount = parseFloat(document.getElementById("depositAmount").value);
+  const result = document.getElementById("depositResult");
+
+  const message = deposit(id, amount);
+  result.textContent = message;
+
+  // Auto-refresh balance if currently viewing that account
+  const activeId = parseInt(document.getElementById("checkId").value);
+  if (id === activeId) {
+    const account = findAccount(id);
+    showAccountDetails(account);
+  }
+}
+
+function withdrawUI() {
+  const id = parseInt(document.getElementById("withdrawId").value);
+  const amount = parseFloat(document.getElementById("withdrawAmount").value);
+  const result = document.getElementById("withdrawResult");
+
+  const message = withdraw(id, amount);
+  result.textContent = message;
+
+  // Auto-refresh balance if currently viewing that account
+  const activeId = parseInt(document.getElementById("checkId").value);
+  if (id === activeId) {
+    const account = findAccount(id);
+    showAccountDetails(account);
+  }
+}
