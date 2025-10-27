@@ -32,8 +32,9 @@ function withdraw(accountId, amount) {
   const feeRate = 0.03;
   if (account && amount > 0) {
     const fee = amount * feeRate;
-    if (account.balance >= amount + fee) {
-      account.balance -= (amount + fee);
+    const totalFee = amount + fee
+    if (account.balance >= totalFee) {
+       account.balance -= totalFee;
       console.log(`Withdrawal of $${amount} successful! Fee: $${fee.toFixed(2)}.`);
     } else {
       console.log("Insufficient funds for this withdrawal.");
