@@ -33,8 +33,8 @@ function findAccount(accountId) {
   return customersAccount.find(acc => acc.accountId === accountId) || null;
 }
 
-function formatCurrency(n){
-  return '$' + Number(n).toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:2});
+function formatCurrency(amount){
+  return '$' + Number(amount).toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:2});
 }
 
 function showAccount(account){
@@ -82,19 +82,19 @@ depositBtn.addEventListener('click', ()=>{
   if(Number.isNaN(amount) || amount <= 0){ depositMessage.textContent = 'Enter a valid amount.'; return; }
   activeAccount.balance += amount;
   showAccount(activeAccount);
-  depositMessage.textContent = `✅ ${formatCurrency(amount)} deposited.`;
+  depositMessage.textContent = ` ${formatCurrency(amount)} deposited.`;
   depositAmountInput.value = '';
 });
 
 // Withdraw
 withdrawBtn.addEventListener('click', ()=>{
-  if(!activeAccount){ withdrawMessage.textContent = '⚠️ No active account.'; return; }
+  if(!activeAccount){ withdrawMessage.textContent = 'No active account.'; return; }
   const amount = parseFloat(withdrawAmountInput.value);
-  if(Number.isNaN(amount) || amount <= 0){ withdrawMessage.textContent = '⚠️ Enter a valid amount.'; return; }
+  if(Number.isNaN(amount) || amount <= 0){ withdrawMessage.textContent = ' Enter a valid amount.'; return; }
   if(activeAccount.balance >= amount){
     activeAccount.balance -= amount;
     showAccount(activeAccount);
-    withdrawMessage.textContent = `✅ ${formatCurrency(amount)} withdrawn.`;
+    withdrawMessage.textContent = ` ${formatCurrency(amount)} withdrawn.`;
     withdrawAmountInput.value = '';
   } else {
     withdrawMessage.textContent = ' Insufficient funds.';
